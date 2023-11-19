@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -22,13 +22,12 @@ abi_uri() {
 
 	if [[ ${1} == loongarch64 ]]; then
 		echo "https://github.com/phorcys/loongarch-desktop-overlay/releases/download/openjdk-17-zero/OpenJDK17U-jdk_loongarch64_linux_hotspot_17.0.3+7.tar.gz"
-    else
-        echo "${2-$1}? (
-			${musl:+ elibc_musl? ( }
-				${baseuri}/OpenJDK${SLOT}U-jdk_${1}_${os}_hotspot_${MY_PV//+/_}.tar.gz
-			${musl:+ ) } )"
-    fi
-
+else
+	echo "${2-$1}? (
+		${musl:+ elibc_musl? ( }
+			${baseuri}/OpenJDK${SLOT}U-jdk_${1}_${os}_hotspot_${MY_PV//+/_}.tar.gz
+		${musl:+ ) } )"
+fi
 }
 
 MY_PV=${PV/_p/+}
@@ -36,11 +35,11 @@ SLOT=$(ver_cut 1)
 
 SRC_URI="
 	$(abi_uri aarch64 arm64)
+	$(abi_uri aarch64 arm64-macos)
 	$(abi_uri arm)
+	$(abi_uri ppc64le ppc64)
 	$(abi_uri x64 amd64)
 	$(abi_uri x64 amd64 musl)
-	$(abi_uri aarch64 arm64-macos)
-	$(abi_uri ppc64le ppc64)
 	$(abi_uri x64 x64-macos)
 	$(abi_uri loongarch64)
 "
@@ -49,7 +48,7 @@ DESCRIPTION="Prebuilt Java JDK binaries provided by Eclipse Temurin"
 HOMEPAGE="https://adoptium.net"
 LICENSE="GPL-2-with-classpath-exception"
 KEYWORDS="amd64 ~arm arm64 ppc64 ~x64-macos"
-IUSE="alsa cups +gentoo-vm headless-awt selinux source"
+IUSE="alsa cups headless-awt selinux source"
 
 RDEPEND="
 	>=sys-apps/baselayout-java-0.1.0-r1
@@ -131,7 +130,7 @@ src_install() {
 	# provide stable symlink
 	dosym "${P}" "/opt/${PN}-${SLOT}"
 
-	use gentoo-vm && java-vm_install-env "${FILESDIR}"/${PN}-${SLOT}.env.sh
+	java-vm_install-env "${FILESDIR}"/${PN}.env.sh
 	java-vm_set-pax-markings "${ddest}"
 	java-vm_revdep-mask
 	java-vm_sandbox-predict /dev/random /proc/self/coredump_filter
