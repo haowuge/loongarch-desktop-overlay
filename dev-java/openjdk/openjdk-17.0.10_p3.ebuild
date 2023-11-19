@@ -32,9 +32,10 @@ bootstrap_uri() {
 # you will see, for example, jdk-17.0.4.1-ga and jdk-17.0.4.1+1, both point
 # to exact same commit sha. we should always use the full version.
 # -ga tag is just for humans to easily identify General Availability release tag.
-MY_PV="${PV%_p*}-ga"
-SLOT="${MY_PV%%[.+]*}"
-
+#MY_PV="${PV%_p*}-ga"
+#SLOT="${MY_PV%%[.+]*}"
+MY_PV="${PV//_p/+}"
+SLOT="$(ver_cut 1)"
 DESCRIPTION="Open source implementation of the Java programming language"
 HOMEPAGE="https://openjdk.org"
 SRC_URI="
@@ -233,6 +234,8 @@ src_configure() {
 
 	use riscv && myconf+=( --with-boot-jdk-jvmargs="-Djdk.lang.Process.launchMechanism=vfork" )
 
+	use loong && myconf+=( --with-jvm-variants=zero --with-libffi-include="/usr/lib64/libffi/include" --with-libffi-lib="/usr/lib64" )
+
 	use lto && myconf+=( --with-jvm-features=link-time-opt )
 
 	if use javafx; then
@@ -308,8 +311,12 @@ src_install() {
 	# must be done before running itself
 	java-vm_set-pax-markings "${ddest}"
 
-	einfo "Creating the Class Data Sharing archives and disabling usage tracking"
-	"${ddest}/bin/java" -server -Xshare:dump -Djdk.disableLastUsageTracking || die
+	if use loong; then
+		einfo "no shared space under loongarch64"
+	else
+		einfo "Creating the Class Data Sharing archives and disabling usage tracking"
+		"${ddest}/bin/java" -server -Xshare:dump -Djdk.disableLastUsageTracking || die
+	fi
 
 	java-vm_install-env "${FILESDIR}"/${PN}.env.sh
 	java-vm_revdep-mask
