@@ -164,6 +164,7 @@ pkg_setup() {
 
 src_prepare() {
 	use riscv && eapply "${DISTDIR}"/java17-riscv64.patch
+	use loong && eapply "${FILESDIR}"/jdk17-17.0.8.1-la64.patch
 	default
 	chmod +x configure || die
 }
@@ -232,6 +233,8 @@ src_configure() {
 	)
 
 	use riscv && myconf+=( --with-boot-jdk-jvmargs="-Djdk.lang.Process.launchMechanism=vfork" )
+
+	use loong && myconf+=( --with-libffi-include="/usr/lib64/libffi/include" --with-libffi-lib="/usr/lib64" )
 
 	use lto && myconf+=( --with-jvm-features=link-time-opt )
 
@@ -308,8 +311,12 @@ src_install() {
 	# must be done before running itself
 	java-vm_set-pax-markings "${ddest}"
 
-	einfo "Creating the Class Data Sharing archives and disabling usage tracking"
-	"${ddest}/bin/java" -server -Xshare:dump -Djdk.disableLastUsageTracking || die
+	##### if use loong; then
+	##### 	einfo "no shared space under loongarch64"
+	##### else
+		einfo "Creating the Class Data Sharing archives and disabling usage tracking"
+		"${ddest}/bin/java" -server -Xshare:dump -Djdk.disableLastUsageTracking || die
+	##### fi
 
 	java-vm_install-env "${FILESDIR}"/${PN}.env.sh
 	java-vm_revdep-mask
