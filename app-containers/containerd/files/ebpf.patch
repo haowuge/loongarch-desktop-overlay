@@ -1,0 +1,10 @@
+--- a/vendor/github.com/cilium/ebpf/internal/endian_le.go	2023-12-26 08:14:37.540000000 +0800
++++ b/vendor/github.com/cilium/ebpf/internal/endian_le.go	2023-12-26 08:15:19.504000000 +0800
+@@ -1,5 +1,5 @@
+-//go:build 386 || amd64 || amd64p32 || arm || arm64 || mipsle || mips64le || mips64p32le || ppc64le || riscv64
+-// +build 386 amd64 amd64p32 arm arm64 mipsle mips64le mips64p32le ppc64le riscv64
++//go:build 386 || amd64 || amd64p32 || arm || arm64 || mipsle || mips64le || mips64p32le || ppc64le || riscv64 || loong64
++// +build 386 amd64 amd64p32 arm arm64 mipsle mips64le mips64p32le ppc64le riscv64 loong64
+ 
+ package internal
+ 

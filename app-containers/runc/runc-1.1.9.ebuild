@@ -40,10 +40,10 @@ RESTRICT+=" test"
 
 S="${WORKDIR}/${PN}-${MY_PV}"
 
-# https://bugs.gentoo.org/748984 https://github.com/etcd-io/etcd/pull/12552
-PATCHES=(
-	"${FILESDIR}/runc-la64.patch"
-)
+PATCHES=( "$FILESDIR"/runc-build-fix.patch
+          "$FILESDIR"/loong64-syscall.patch
+          "$FILESDIR"/loong64-seccomp.patch
+        )
 
 src_compile() {
 	# Taken from app-containers/docker-1.7.0-r1

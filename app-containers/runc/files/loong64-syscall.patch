@@ -1,0 +1,71 @@
+From 50cacf31451f2d6f1bb4e44a849aa5b943c347d2 Mon Sep 17 00:00:00 2001
+From: zhaixiaojuan <zhaixiaojuan@loongson.cn>
+Date: Thu, 9 Mar 2023 14:22:41 +0800
+Subject: [PATCH] Update syscall to start loong64 support
+
+---
+ libcontainer/seccomp/config.go                |  1 +
+ libcontainer/seccomp/patchbpf/enosys_linux.go | 10 ++++++++++
+ libcontainer/system/syscall_linux_64.go       |  4 ++--
+ 3 files changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/libcontainer/seccomp/config.go b/libcontainer/seccomp/config.go
+index 3ca03ed8a30..46b40ceb279 100644
+--- a/libcontainer/seccomp/config.go
++++ b/libcontainer/seccomp/config.go
+@@ -74,6 +74,7 @@ var archs = map[string]string{
+ 	"SCMP_ARCH_RISCV64":     "riscv64",
+ 	"SCMP_ARCH_S390":        "s390",
+ 	"SCMP_ARCH_S390X":       "s390x",
++    "SCMP_ARCH_LOONGARCH64": "loong64",
+ }
+ 
+ // KnownArchs returns the list of the known archs.
+diff --git a/libcontainer/seccomp/patchbpf/enosys_linux.go b/libcontainer/seccomp/patchbpf/enosys_linux.go
+index 7fc9fd662c3..9f9f7d6106e 100644
+--- a/libcontainer/seccomp/patchbpf/enosys_linux.go
++++ b/libcontainer/seccomp/patchbpf/enosys_linux.go
+@@ -60,6 +60,13 @@ const uintptr_t C_FILTER_FLAG_NEW_LISTENER = SECCOMP_FILTER_FLAG_NEW_LISTENER;
+ #define AUDIT_ARCH_RISCV64	(EM_RISCV|__AUDIT_ARCH_64BIT|__AUDIT_ARCH_LE)
+ #endif
+ 
++#ifndef AUDIT_ARCH_LOONGARCH64
++#ifndef EM_LOONGARCH
++#define EM_LOONGARCH        258
++#endif
++#define AUDIT_ARCH_LOONGARCH64  (EM_LOONGARCH|__AUDIT_ARCH_64BIT|__AUDIT_ARCH_LE)
++#endif
++
+ // We use the AUDIT_ARCH_* values because those are the ones used by the kernel
+ // and SCMP_ARCH_* sometimes has fake values (such as SCMP_ARCH_X32). But we
+ // use <seccomp.h> so we get libseccomp's fallback definitions of AUDIT_ARCH_*.
+@@ -80,6 +87,7 @@ const uint32_t C_AUDIT_ARCH_PPC64LE      = AUDIT_ARCH_PPC64LE;
+ const uint32_t C_AUDIT_ARCH_S390         = AUDIT_ARCH_S390;
+ const uint32_t C_AUDIT_ARCH_S390X        = AUDIT_ARCH_S390X;
+ const uint32_t C_AUDIT_ARCH_RISCV64      = AUDIT_ARCH_RISCV64;
++const uint32_t C_AUDIT_ARCH_LOONGARCH64  = AUDIT_ARCH_LOONGARCH64;
+ */
+ import "C"
+ 
+@@ -219,6 +227,8 @@ func archToNative(arch libseccomp.ScmpArch) (nativeArch, error) {
+ 		return nativeArch(C.C_AUDIT_ARCH_S390X), nil
+ 	case libseccomp.ArchRISCV64:
+ 		return nativeArch(C.C_AUDIT_ARCH_RISCV64), nil
++	case libseccomp.ArchLOONGARCH64:
++		return nativeArch(C.C_AUDIT_ARCH_LOONGARCH64), nil
+ 	default:
+ 		return invalidArch, fmt.Errorf("unknown architecture: %v", arch)
+ 	}
+diff --git a/libcontainer/system/syscall_linux_64.go b/libcontainer/system/syscall_linux_64.go
+index 1ed0dba1709..262450ad4cf 100644
+--- a/libcontainer/system/syscall_linux_64.go
++++ b/libcontainer/system/syscall_linux_64.go
+@@ -1,6 +1,6 @@
+-//go:build linux && (arm64 || amd64 || mips || mipsle || mips64 || mips64le || ppc || ppc64 || ppc64le || riscv64 || s390x)
++//go:build linux && (arm64 || amd64 || loong64 || mips || mipsle || mips64 || mips64le || ppc || ppc64 || ppc64le || riscv64 || s390x)
+ // +build linux
+-// +build arm64 amd64 mips mipsle mips64 mips64le ppc ppc64 ppc64le riscv64 s390x
++// +build arm64 amd64 loong64 mips mipsle mips64 mips64le ppc ppc64 ppc64le riscv64 s390x
+ 
+ package system
+ 
