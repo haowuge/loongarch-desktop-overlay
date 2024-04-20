@@ -40,6 +40,11 @@ RESTRICT+=" test"
 
 S="${WORKDIR}/${PN}-${MY_PV}"
 
+PATCHES=( "$FILESDIR"/runc-build-fix.patch
+          "$FILESDIR"/loong64-syscall.patch
+          "$FILESDIR"/loong64-seccomp.patch
+        )
+
 src_compile() {
 	# Taken from app-containers/docker-1.7.0-r1
 	export CGO_CFLAGS="-I${ESYSROOT}/usr/include"
