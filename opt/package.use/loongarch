@@ -1,0 +1,77 @@
+sys-kernel/installkernel dracut
+x11-base/xwayland libei
+media-libs/libsdl2 gles2
+app-emulation/qemu accessibility fuse gtk io-uring keyutils lzo sdl sdl-image smartcard ssh usb usbredir virgl virtfs
+app-emulation/spice gstreamer lz4 smartcard
+sys-apps/pcsc-lite embedded
+
+dev-qt/qtpositioning geoclue
+sys-fs/zfs-kmod modules-compress
+
+dev-qt/qtgui accessibility
+dev-python/PyQt5 gui svg widgets
+
+dev-qt/qtwayland compositor
+
+dev-libs/xmlsec nss
+dev-db/postgresql kerberos
+app-office/libreoffice accessibility gstreamer kde pdfimport
+media-libs/opencv contribdnn contrib
+sci-libs/hdf5 fortran
+sci-libs/opencascade json vtk
+media-fonts/nerd-fonts noto
+sys-libs/zlib minizip
+net-libs/nodejs inspector
+virtual/rust profiler
+dev-lang/rust-bin profiler
+#dev-lang/rust profiler
+#media-libs/cogl gles2
+gnome-extra/gnome-shell-extension-gsconnect nautilus
+media-libs/libvpx postproc
+media-video/ffmpeg opus x264 libass sdl
+media-video/pipewire sound-server v4l extra gsettings gstreamer pipewire-alsa
+#www-client/firefox -system-libvpx
+dev-qt/qtbase opengl
+dev-qt/qttools opengl
+#x11-libs/cairo X
+##sys-libs/libunwind static-libs
+##app-arch/xz-utils static-libs
+##sys-libs/zlib static-libs
+sys-process/htop unicode hwloc lm-sensors
+app-editors/vim -X
+sys-apps/systemd policykit audit cryptsetup fido2 qrcode
+
+app-misc/mime-types nginx
+www-client/firefox -clang
+mail-client/thunderbird -clang
+
+##dev-libs/libportal gtk
+app-text/poppler cairo
+media-libs/gegl cairo
+sys-boot/grub fonts nls themes truetype
+
+dev-python/pillow tiff webp
+media-libs/tiff jpeg
+media-gfx/inkscape exif graphicsmagick imagemagick jpeg postscript sourceview svg2 visio
+media-gfx/graphicsmagick heif imagemagick jpeg jpegxl png postscript svg tiff webp
+
+#net-im/tencent-qq -bwrap
+#net-im/tencent-qq bwrap system-vips gnome appindicator liteloader
+
+
+kde-frameworks/kwindowsystem X
+app-text/xmlto text
+media-video/vlc ogg
+media-video/obs-studio truetype vlc
+dev-qt/qtbase libproxy
+kde-plasma/kwin lock
+app-text/poppler nss
+app-crypt/gcr gtk
+media-libs/mlt ffmpeg frei0r qt6 sdl xml
+
+
+
+
+
+
+

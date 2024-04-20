@@ -1,0 +1,18 @@
+*/* ~*
+#=sys-devel/gcc-14.0.1_pre20240317 **
+=sys-devel/gcc-14.0.1_pre20240414 **
+#=sys-boot/grub-2.12_rc1-r1 **
+#gnome-extra/gnome-shell-extension-desktop-icons-ng ~*
+#=www-client/firefox-123.0 **
+#=www-client/chromium-122.0.6261.111 **
+
+=sys-kernel/gentoo-sources-6.8.3 **
+=media-fonts/ttf-wps-fonts-1.0 **
+
+=sys-fs/zfs-9999 **
+=sys-fs/zfs-kmod-9999 **
+
+=sys-kernel/gentoo-sources-6.8.6 **
+
+#=app-containers/containerd-1.7.8 **
+#app-containers/containerd::ghw
